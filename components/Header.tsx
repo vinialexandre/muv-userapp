@@ -2,21 +2,21 @@ import { Image as RNImage } from 'react-native';
 import { Icon } from './Icon';
 
 interface HeaderProps {
-  onLogout: () => void;
+  onOpenMenu: () => void;
 }
 
-export function Header({ onLogout }: HeaderProps) {
+export function Header({ onOpenMenu }: HeaderProps) {
   return (
-    <div className="w-full bg-white px-4 mb-6">
-      <div className="flex justify-between items-center pb-4">
-        <RNImage source={require('../assets/logo-muv.png')} style={{ height: 80, width: 80 }} />
-        <button
-          onClick={onLogout}
-          className="bg-transparent border border-black rounded-lg px-4 py-2 text-sm cursor-pointer flex items-center gap-2"
-        >
-          <Icon name="logOut" size={20} />
-        </button>
+    <div className="w-full bg-white px-4 mb-6 ">
+      <div className="flex items-center">
+        <RNImage source={require('../assets/logo-muv.png')} style={{ height: 80, width: 80}} />
       </div>
+      <button
+        onClick={onOpenMenu}
+        className="absolute top-4 right-4 bg-transparent border-none text-black rounded-lg p-2 cursor-pointer flex items-center justify-center"
+      >
+        <Icon name="menu" size={24} />
+      </button>
       <div className="border-b border-gray-200"></div>
     </div>
   );

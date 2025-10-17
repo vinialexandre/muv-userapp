@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+.adm-toast:has(.admy-toast-success) .adm-toast-main{background-color:#16a34ac9 !important;color:#fff}
+.adm-toast:has(.admy-toast-error) .adm-toast-main{background-color:#dc2626e6 !important;color:#fff}
+.adm-toast-icon{display:flex;justify-content:center;margin:0 auto 4px}
+.adm-toast-text{text-align:center}

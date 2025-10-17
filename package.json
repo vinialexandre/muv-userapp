@@ -13,6 +13,8 @@
     "babel-preset-expo": "^54.0.4",
     "expo": "~54.0.13",
     "expo-status-bar": "~3.0.8",
+    "firebase": "^12.4.0",
+    "firebase-tools": "^14.20.0",
     "nativewind": "^4.2.1",
     "react": "19.1.0",
     "react-dom": "19.1.0",
