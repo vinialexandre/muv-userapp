@@ -7,7 +7,7 @@ interface HeaderProps {
 
 export function Header({ onOpenMenu }: HeaderProps) {
   return (
-    <div className="w-full bg-white px-4 mb-6 ">
+    <div className="w-full bg-white px-4 mb-6 fixed top-0 left-0 right-0 z-50">
       <div className="flex items-center">
         <RNImage source={require('../assets/logo-muv.png')} style={{ height: 80, width: 80}} />
       </div>

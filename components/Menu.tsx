@@ -2,6 +2,7 @@ import { Icon } from './Icon';
 import { auth } from '../firebase';
 import { signOut } from 'firebase/auth';
 
+
 interface MenuProps {
   isOpen: boolean;
   onClose: () => void;
