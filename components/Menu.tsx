@@ -1,3 +1,4 @@
+import { View, Text, Pressable, Platform, Modal } from 'react-native';
 import { Icon } from './Icon';
 import { auth } from '../firebase';
 import { signOut } from 'firebase/auth';
@@ -10,46 +11,53 @@ interface MenuProps {
 }
 
 export function Menu({ isOpen, onClose, onNavigate }: MenuProps) {
-  if (!isOpen) return null;
-
-  const currentPath = window.location.pathname;
+  const currentPath = Platform.OS === 'web' ? (window as any).location.pathname : '';
 
   return (
-    <div className="fixed inset-0 z-[200] bg-black text-white flex flex-col items-center justify-center animate-slide-right">
-      <button
-        onClick={onClose}
-        className="absolute top-6 right-6 bg-transparent border-none text-white cursor-pointer"
-      >
-        <Icon name="x" size={28} />
-      </button>
-      <div className="flex flex-col gap-8 items-center">
-        <button
-          onClick={() => onNavigate('/dados-usuario')}
-          className={`flex items-center gap-4 px-8 py-5 rounded-xl text-white border-none text-xl cursor-pointer ${
-            currentPath === '/dados-usuario' ? 'bg-white bg-opacity-10' : 'bg-transparent'
-          }`}
-        >
-          <Icon name="user" size={28} />
-          <span>Seus Dados</span>
-        </button>
-        <button
-          onClick={() => onNavigate('/checkin-manual')}
-          className={`flex items-center gap-4 px-8 py-5 rounded-xl text-white border-none text-xl cursor-pointer ${
-            currentPath === '/checkin-manual' ? 'bg-white bg-opacity-10' : 'bg-transparent'
-          }`}
-        >
-          <Icon name="clock" size={28} />
-          <span>Check-in Manual</span>
-        </button>
-      </div>
-      <button
-        onClick={async () => { try { await signOut(auth); } finally { window.location.href = '/'; } }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 bg-transparent border-none text-white cursor-pointer flex items-center gap-3"
-      >
-        <span className='text-xl'>Sair</span>
-        <Icon name="logOut" size={28} />
-      </button>
+    <Modal visible={isOpen} transparent animationType="slide" onRequestClose={onClose}>
+      <View className="absolute inset-0 z-[200]">
+        <Pressable className="absolute inset-0 bg-black/60" onPress={onClose} />
+        <View className="absolute inset-0 items-center justify-center">
+          <Pressable
+            onPress={onClose}
+            className="absolute top-6 right-6"
+            accessibilityRole="button"
+            accessibilityLabel="Fechar menu"
+          >
+            <Icon name="x" size={28} />
+          </Pressable>
 
-    </div>
+          <View className="flex flex-col gap-8 items-center">
+            <Pressable
+              onPress={() => onNavigate('/dados-usuario')}
+              className={`flex-row items-center gap-4 px-8 py-5 rounded-xl ${currentPath === '/dados-usuario' ? 'bg-white/10' : 'bg-transparent'}`}
+            >
+              <Icon name="user" size={28} />
+              <Text className="text-white text-xl">Seus Dados</Text>
+            </Pressable>
+
+            <Pressable
+              onPress={() => onNavigate('/checkin-manual')}
+              className={`flex-row items-center gap-4 px-8 py-5 rounded-xl ${currentPath === '/checkin-manual' ? 'bg-white/10' : 'bg-transparent'}`}
+            >
+              <Icon name="clock" size={28} />
+              <Text className="text-white text-xl">Check-in Manual</Text>
+            </Pressable>
+          </View>
+
+          <Pressable
+            onPress={async () => {
+              try { await signOut(auth); } finally {
+                if (Platform.OS === 'web') { (window as any).location.href = '/'; }
+              }
+            }}
+            className="absolute bottom-8 left-1/2 -translate-x-1/2 flex-row items-center gap-3"
+          >
+            <Text className="text-white text-xl">Sair</Text>
+            <Icon name="logOut" size={28} />
+          </Pressable>
+        </View>
+      </View>
+    </Modal>
   );
 }

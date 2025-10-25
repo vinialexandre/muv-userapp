@@ -1,9 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
+import { View, Text, Pressable, ScrollView } from 'react-native';
 import { Header } from './components/Header';
 import { Menu } from './components/Menu';
 import { Icon } from './components/Icon';
 import { Popup } from './components/ui/Popup';
+import { Input } from './components/ui/Input';
+import { Button } from './components/ui/Button';
+import Router from './router';
 
 import './global.css';
 
@@ -25,11 +29,11 @@ export default function Dashboard() {
 
   const handleNavigate = (path: string) => {
     setIsMenuOpen(false);
-    window.location.href = path;
+    Router.navigate(path);
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 w-full">
+    <View className="min-h-screen bg-gray-50 w-full pt-24">
       <Header onOpenMenu={() => setIsMenuOpen(true)} />
 
       <Menu
@@ -38,73 +42,75 @@ export default function Dashboard() {
         onNavigate={handleNavigate}
       />
 
-      <div className="px-4">
-        {/* Main Card */}
-        <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 w-full">
-        {/* Header with Title and Add Button */}
-        <div className="flex justify-between items-center mb-5">
-          <div className="flex items-center gap-2">
-            <Icon name="clock" size={20} />
-            <span className="text-lg font-bold">Check-in Manual</span>
-          </div>
-          <button onClick={() => setIsCreateOpen(true)} className="bg-yellow-300 text-black border-none rounded-xl w-11 h-11 flex items-center justify-center cursor-pointer text-xl font-bold shadow-md">
-            +
-          </button>
-        </div>
+      <View className="px-4">
+        <View className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 w-full">
+          <View className="flex justify-between items-center mb-5">
+            <View className="flex-row items-center gap-2">
+              <Icon name="clock" size={20} />
+              <Text className="text-lg font-bold">Check-in Manual</Text>
+            </View>
+            <Pressable onPress={() => setIsCreateOpen(true)} className="bg-yellow-300 rounded-xl w-11 h-11 items-center justify-center shadow-md">
+              <Text className="text-xl font-bold text-black">+</Text>
+            </Pressable>
+          </View>
 
-        {/* Check-ins List */}
-        <div className="flex flex-col gap-4">
-          {checkins.map(checkin => (
-            <div key={checkin.id} className="bg-gray-50 border border-gray-200 rounded-xl p-5 shadow-sm">
-              <div className="flex justify-between items-start">
-                <div className="flex-1">
-                  <div className="font-semibold text-lg mb-3 text-gray-900">
-                    {checkin.time}
-                  </div>
-                </div>
-                <div className="text-base text-gray-700 font-medium">
-                  {checkin.date}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-      </div>
+          <ScrollView className="flex-1">
+            <View className="flex flex-col gap-4">
+              {checkins.map(checkin => (
+                <View key={checkin.id} className="bg-gray-50 border border-gray-200 rounded-xl p-5 shadow-sm">
+                  <View className="flex-row justify-between items-start">
+                    <View className="flex-1">
+                      <Text className="font-semibold text-lg mb-3 text-gray-900">
+                        {checkin.time}
+                      </Text>
+                    </View>
+                    <Text className="text-base text-gray-700 font-medium">
+                      {checkin.date}
+                    </Text>
+                  </View>
+                </View>
+              ))}
+            </View>
+          </ScrollView>
+        </View>
+      </View>
+
       <Popup
         visible={isCreateOpen}
         onMaskClick={() => setIsCreateOpen(false)}
         position="bottom"
         bodyStyle={{ height: '90vh', borderTopLeftRadius: 16, borderTopRightRadius: 16, overflow: 'auto' }}
       >
-        <div className="w-full p-4">
-          <div className="flex justify-between items-center mb-4">
-            <span className="text-lg font-bold">Novo Check-in</span>
-            <button onClick={() => setIsCreateOpen(false)} className="bg-transparent border-none text-black cursor-pointer">
+        <View className="w-full p-4">
+          <View className="flex-row justify-between items-center mb-4">
+            <Text className="text-lg font-bold">Novo Check-in</Text>
+            <Pressable onPress={() => setIsCreateOpen(false)} className="p-2">
               <Icon name="x" size={20} />
-            </button>
-          </div>
-          <div className="mb-4">
-            <label className="block text-sm font-medium mb-2">Hora</label>
-            <input
+            </Pressable>
+          </View>
+
+          <View className="mb-4">
+            <Text className="block text-sm font-medium mb-2">Hora</Text>
+            <Input
               value={newTime}
-              onChange={(e: any) => {
-                let v = String(e.target.value || '').replace(/\D/g, '').slice(0, 4);
+              onChange={(text: string) => {
+                let v = String(text || '').replace(/\D/g, '').slice(0, 4);
                 if (v.length >= 3) v = v.slice(0, 2) + ':' + v.slice(2);
                 setNewTime(v);
               }}
               maxLength={5}
               inputMode="numeric"
               placeholder="HH:MM"
-              className="w-full p-3 border border-black rounded-lg"
+              className="w-full p-3 border border-gray-300 rounded-lg"
             />
-          </div>
-          <div className="mb-6">
-            <label className="block text-sm font-medium mb-2">Data</label>
-            <input
+          </View>
+
+          <View className="mb-6">
+            <Text className="block text-sm font-medium mb-2">Data</Text>
+            <Input
               value={newDate}
-              onChange={(e: any) => {
-                let v = String(e.target.value || '').replace(/\D/g, '').slice(0, 8);
+              onChange={(text: string) => {
+                let v = String(text || '').replace(/\D/g, '').slice(0, 8);
                 if (v.length > 4) v = v.slice(0, 2) + '/' + v.slice(2, 4) + '/' + v.slice(4);
                 else if (v.length > 2) v = v.slice(0, 2) + '/' + v.slice(2);
                 setNewDate(v);
@@ -112,10 +118,11 @@ export default function Dashboard() {
               maxLength={10}
               inputMode="numeric"
               placeholder="DD/MM/AAAA"
-              className="w-full p-3 border border-black rounded-lg"
+              className="w-full p-3 border border-gray-300 rounded-lg"
             />
-          </div>
-          <button
+          </View>
+
+          <Button
             onClick={() => {
               if (!newTime || !newDate) {
                 alert('Preencha hora e data');
@@ -126,15 +133,15 @@ export default function Dashboard() {
               setNewTime('');
               setNewDate('');
             }}
-            className="w-full bg-black text-white rounded-lg py-3"
+            block
+            className="bg-black rounded-lg py-3"
           >
-            Salvar
-          </button>
-        </div>
+            <Text className="text-white text-center">Salvar</Text>
+          </Button>
+        </View>
       </Popup>
 
-
       <StatusBar style="auto" />
-    </div>
+    </View>
   );
 }

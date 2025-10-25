@@ -1,9 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState, useEffect } from 'react';
-import { View, Image as RNImage, Text, Pressable } from 'react-native';
+import { View, Image as RNImage, Text, Pressable, Platform } from 'react-native';
 import { Button } from './components/ui/Button';
 import { Input } from './components/ui/Input';
 import { Toast, ToastRoot } from './components/ui/ToastAdapter';
+import Router from './router';
 
 import './global.css';
 import CheckinManual from './CheckinManual';
@@ -21,10 +22,13 @@ export default function App() {
   const [currentPath, setCurrentPath] = useState('/');
 
   useEffect(() => {
-    setCurrentPath(window.location.pathname);
+    Router.setNavigator(setCurrentPath);
+    if (typeof window !== 'undefined') {
+      setCurrentPath(window.location.pathname);
+    }
     const unsub = onAuthStateChanged(auth, (user) => {
-      if (user && window.location.pathname === '/') {
-        window.location.replace('/checkin-manual');
+      if (user && (typeof window === 'undefined' || window.location.pathname === '/')) {
+        Router.navigate('/checkin-manual');
       }
     });
     return () => unsub();
@@ -62,10 +66,10 @@ export default function App() {
       setLoading(true);
       const emailResolved = await resolveEmail(email);
       await signInWithEmailAndPassword(auth, emailResolved, password);
-      Toast.show({ icon: 'success', content: <span className="admy-toast-success">Login realizado</span> });
-      window.location.href = '/checkin-manual';
+      Toast.show({ icon: 'success', content: 'Login realizado' });
+      Router.navigate('/checkin-manual');
     } catch (e: any) {
-      Toast.show({ icon: 'fail', position: 'bottom', content: <span className="admy-toast-error">{mapAuthError(e)}</span> });
+      Toast.show({ icon: 'fail', position: 'bottom', content: mapAuthError(e) });
     } finally {
       setLoading(false);
     }
@@ -75,9 +79,9 @@ export default function App() {
     try {
       const emailResolved = await resolveEmail(email);
       await sendPasswordResetEmail(auth, emailResolved);
-      Toast.show({ icon: 'success', content: <span className="admy-toast-success">Email de recuperação enviado</span> });
+      Toast.show({ icon: 'success', content: 'Email de recuperação enviado' });
     } catch (e: any) {
-      Toast.show({ icon: 'fail', position: 'bottom', content: <span className="admy-toast-error">{mapAuthError(e)}</span> });
+      Toast.show({ icon: 'fail', position: 'bottom', content: mapAuthError(e) });
     }
   };
 
