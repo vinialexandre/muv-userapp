@@ -16,15 +16,23 @@
       "supportsTablet": true
     },
     "android": {
+      "packageName": "com.muv.userapp",
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.muv.userapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "c5f01bbb-d280-452b-8f0c-3f0448de40f2"
+      }
     }
   }
 }

@@ -1,15 +1,17 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState, useEffect } from 'react';
-import { View, Image as RNImage } from 'react-native';
-import { Button, Input, Toast } from 'antd-mobile';
-import { EyeOutline, EyeInvisibleOutline } from 'antd-mobile-icons';
-import 'antd-mobile/es/global';
+import { View, Image as RNImage, Text, Pressable } from 'react-native';
+import { Button } from './components/ui/Button';
+import { Input } from './components/ui/Input';
+import { Toast, ToastRoot } from './components/ui/ToastAdapter';
+
 import './global.css';
 import CheckinManual from './CheckinManual';
 import DadosUsuario from './DadosUsuario';
 import { auth, db } from './firebase';
 import { signInWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
+import { Icon } from './components/Icon';
 
 export default function App() {
   const [email, setEmail] = useState('');
@@ -81,62 +83,51 @@ export default function App() {
 
   return (
     <View style={{ flex: 1, backgroundColor: 'white', alignItems: 'center', justifyContent: 'center', paddingHorizontal: 24, paddingVertical: 48 }}>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: 32 }}>
-        <RNImage source={require('./assets/logo-muv.png')} style={{ height: 160, width: 160, marginBottom: 16 }} />
-        <h1 style={{ fontSize: 32, fontWeight: 'bold', color: '#111827', marginBottom: 8, textAlign: 'center' }}>Bem-vindo</h1>
-      </div>
+      <View className="items-center mb-12">
+        <RNImage source={require('./assets/logo-muv.png')} style={{ height: 160, width: 160, marginBottom: 24 }} />
+        <Text className="text-5xl font-bold text-gray-900 text-center">Bem-vindo</Text>
+      </View>
 
-      <div style={{ width: '100%', maxWidth: 384 }}>
-          <div className="mb-4">
+      <View className="w-96">
+          <View className="mb-6">
             <Input
               value={email}
               onChange={setEmail}
               disabled={loading}
               placeholder="Email ou usuário"
-              className="w-full h-12 px-4 bg-white border border-black rounded-xl text-base"
+              className="w-full h-16 px-6 bg-white border-2 border-black rounded-xl text-lg"
             />
-          </div>
+          </View>
 
-          <div className="mb-6 relative">
+          <View className="mb-8 relative">
             <Input
               value={password}
               onChange={setPassword}
               disabled={loading}
               placeholder="Senha"
               type={showPw ? 'text' : 'password'}
-              className="w-full h-12 px-4 pr-12 bg-white border border-black rounded-xl text-base"
+              className="w-full h-16 px-6 pr-14 bg-white border-2 border-black rounded-xl text-lg"
             />
-            <button
-              onClick={() => setShowPw((v) => !v)}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400"
-              type="button"
+            <Pressable
+              onPress={() => setShowPw((v) => !v)}
+              className="absolute right-4 top-[18px]"
             >
-              {showPw ? <EyeInvisibleOutline className="text-xl" /> : <EyeOutline className="text-xl" />}
-            </button>
-          </div>
+              {showPw ? <Icon name="eyeOff" size={20} className="text-gray-400" /> : <Icon name="eye" size={20} className="text-gray-400" />}
+            </Pressable>
+          </View>
 
           <Button
             block
             loading={loading}
             disabled={loading}
             onClick={submit}
-            className="h-12 bg-black text-white rounded-xl font-medium text-base mb-4"
+            className="h-16 bg-black rounded-xl"
           >
-            Entrar
+            <Text className="text-white font-bold text-lg">Entrar</Text>
           </Button>
-
-        <div className="text-center">
-          <button
-            type="button"
-            onClick={forgot}
-            disabled={loading}
-            className="text-gray-500 text-sm"
-          >
-            Esqueceu a senha?
-          </button>
-        </div>
-      </div>
+      </View>
       <StatusBar style="auto" />
+      <ToastRoot />
     </View>
   );
 }

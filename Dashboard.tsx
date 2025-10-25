@@ -3,8 +3,7 @@ import { useState } from 'react';
 import { Header } from './components/Header';
 import { Menu } from './components/Menu';
 import { Icon } from './components/Icon';
-import 'antd-mobile/es/global';
-import { Popup } from 'antd-mobile';
+import { Popup } from './components/ui/Popup';
 
 import './global.css';
 
