@@ -21,11 +21,11 @@ export default function App() {
 
   useEffect(() => {
     Router.setNavigator(setCurrentPath);
-    if (typeof window !== 'undefined') {
-      setCurrentPath(window.location.pathname);
+    if (Platform.OS === 'web' && typeof window !== 'undefined' && (window as any)?.location?.pathname != null) {
+      setCurrentPath((window as any).location.pathname);
     }
     const unsub = onAuthStateChanged(auth, (user) => {
-      if (user && (typeof window === 'undefined' || window.location.pathname === '/')) {
+      if (user && (Platform.OS !== 'web' || (typeof window !== 'undefined' && (window as any)?.location?.pathname === '/'))) {
         Router.navigate('/checkin-manual');
       }
     });
@@ -84,9 +84,9 @@ export default function App() {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: 'white', alignItems: 'center', justifyContent: 'center', paddingHorizontal: 24, paddingVertical: 48 }}>
-      <View className="items-center mb-12">
-        <RNImage source={require('./assets/logo-muv.png')} style={{ height: 160, width: 160, marginBottom: 24 }} />
+    <View style={{ flex: 1, backgroundColor: 'white', alignItems: 'center', justifyContent: 'flex-start', paddingHorizontal: 24, paddingTop: 80 }}>
+      <View className="items-center mb-8">
+        <RNImage source={require('./assets/logo-muv.png')} style={{ height: 140, width: 140, marginBottom: 16 }} />
         <Text className="text-5xl font-bold text-gray-900 text-center">Bem-vindo</Text>
       </View>
 
@@ -114,7 +114,7 @@ export default function App() {
               onPress={() => setShowPw((v) => !v)}
               className="absolute right-4 top-[18px]"
             >
-              {showPw ? <Icon name="eyeOff" size={20} className="text-gray-400" /> : <Icon name="eye" size={20} className="text-gray-400" />}
+              {showPw ? <Icon name="eyeOff" size={20} color="#9ca3af" /> : <Icon name="eye" size={20} color="#9ca3af" />}
             </Pressable>
           </View>
 
@@ -123,9 +123,9 @@ export default function App() {
             loading={loading}
             disabled={loading}
             onClick={submit}
-            className="h-16 bg-black rounded-xl"
+            className="h-16 bg-black rounded-xl flex items-center justify-center"
           >
-            <Text className="text-white font-bold text-lg">Entrar</Text>
+            <Text className="text-white font-bold text-xl text-center">Entrar</Text>
           </Button>
       </View>
       <StatusBar style="auto" />

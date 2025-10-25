@@ -1,3 +1,5 @@
+import Svg, { Path } from 'react-native-svg';
+
 export type IconName =
   | 'users' | 'folder' | 'monitor' | 'user'
   | 'chevronLeft' | 'chevronRight'
@@ -19,10 +21,10 @@ const icons: Partial<Record<IconName, string>> = {
   eyeOff: 'M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6z M3 3l18 18'
 };
 
-export function Icon({ name, size = 18, color = 'currentColor', strokeWidth = 1.75, ...props }: { name: IconName; size?: number; color?: string; strokeWidth?: number } & React.SVGProps<SVGSVGElement>) {
+export function Icon({ name, size = 18, color = '#000', strokeWidth = 1.75 }: { name: IconName; size?: number; color?: string; strokeWidth?: number }) {
   const d = icons[name] || icons['x'] || '';
   return (
-    <svg
+    <Svg
       width={size}
       height={size}
       viewBox="0 0 24 24"
@@ -31,9 +33,8 @@ export function Icon({ name, size = 18, color = 'currentColor', strokeWidth = 1.
       strokeWidth={strokeWidth}
       strokeLinecap="round"
       strokeLinejoin="round"
-      {...props}
     >
-      <path d={d as string} />
-    </svg>
+      <Path d={d as string} />
+    </Svg>
   );
 }

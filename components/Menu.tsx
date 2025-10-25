@@ -15,8 +15,7 @@ export function Menu({ isOpen, onClose, onNavigate }: MenuProps) {
 
   return (
     <Modal visible={isOpen} transparent animationType="slide" onRequestClose={onClose}>
-      <View className="absolute inset-0 z-[200]">
-        <Pressable className="absolute inset-0 bg-black/60" onPress={onClose} />
+      <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 200, backgroundColor: '#000' }}>
         <View className="absolute inset-0 items-center justify-center">
           <Pressable
             onPress={onClose}
@@ -24,7 +23,7 @@ export function Menu({ isOpen, onClose, onNavigate }: MenuProps) {
             accessibilityRole="button"
             accessibilityLabel="Fechar menu"
           >
-            <Icon name="x" size={28} />
+            <Icon name="x" size={28} color="#fff" />
           </Pressable>
 
           <View className="flex flex-col gap-8 items-center">
@@ -32,7 +31,7 @@ export function Menu({ isOpen, onClose, onNavigate }: MenuProps) {
               onPress={() => onNavigate('/dados-usuario')}
               className={`flex-row items-center gap-4 px-8 py-5 rounded-xl ${currentPath === '/dados-usuario' ? 'bg-white/10' : 'bg-transparent'}`}
             >
-              <Icon name="user" size={28} />
+              <Icon name="user" size={28} color="#fff" />
               <Text className="text-white text-xl">Seus Dados</Text>
             </Pressable>
 
@@ -40,7 +39,7 @@ export function Menu({ isOpen, onClose, onNavigate }: MenuProps) {
               onPress={() => onNavigate('/checkin-manual')}
               className={`flex-row items-center gap-4 px-8 py-5 rounded-xl ${currentPath === '/checkin-manual' ? 'bg-white/10' : 'bg-transparent'}`}
             >
-              <Icon name="clock" size={28} />
+              <Icon name="clock" size={28} color="#fff" />
               <Text className="text-white text-xl">Check-in Manual</Text>
             </Pressable>
           </View>
@@ -51,10 +50,10 @@ export function Menu({ isOpen, onClose, onNavigate }: MenuProps) {
                 if (Platform.OS === 'web') { (window as any).location.href = '/'; }
               }
             }}
-            className="absolute bottom-8 left-1/2 -translate-x-1/2 flex-row items-center gap-3"
+            className="absolute bottom-8 right-6 flex-row items-center gap-3"
           >
             <Text className="text-white text-xl">Sair</Text>
-            <Icon name="logOut" size={28} />
+            <Icon name="logOut" size={28} color="#fff" />
           </Pressable>
         </View>
       </View>

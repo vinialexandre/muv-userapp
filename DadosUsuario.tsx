@@ -104,9 +104,11 @@ export default function DadosUsuario() {
       if (phoneNum !== undefined) payload.phone = phoneNum;
 
       await setDoc(doc(db, 'students', sid), payload, { merge: true });
-      Toast.show({ icon: 'success', position: 'bottom', duration: 1500, content: 'Dados salvos!' });
+      setTimeout(() => {
+        Toast.show({ icon: 'success', position: 'top', duration: 1500, content: 'Dados salvos!' });
+      }, 10);
     } catch (e: any) {
-      Toast.show({ icon: 'fail', position: 'bottom', content: e?.message || 'Erro ao salvar dados' });
+      Toast.show({ icon: 'fail', position: 'top', content: e?.message || 'Erro ao salvar dados' });
     }
   };
 
@@ -125,13 +127,13 @@ export default function DadosUsuario() {
           <View className="p-6 max-[768px]:p-5 border-b border-gray-100">
             <View className="flex items-center gap-3 max-[768px]:gap-4 max-[768px]:justify-center">
               <View className="max-[768px]:bg-blue-50 max-[768px]:p-2 max-[768px]:rounded-xl">
-                <Icon name="user" size={20} className="max-[768px]:text-blue-600" />
+                <Icon name="user" size={20} color="#000" />
               </View>
               <Text className="text-xl font-bold max-[768px]:text-2xl max-[768px]:text-gray-900">Seus Dados</Text>
             </View>
           </View>
 
-          <ScrollView className="p-6 max-[768px]:p-5 max-[768px]:flex-1">
+          <ScrollView className="p-6 max-[768px]:p-5 max-[768px]:flex-1" contentContainerStyle={{ paddingBottom: 400 }}>
             <View className="flex flex-col gap-4 max-[768px]:gap-6">
               <View>
                 <Text className="block text-lg font-medium text-gray-700 mb-2 max-[768px]:text-base max-[768px]:font-bold max-[768px]:text-gray-800 max-[768px]:mb-3">Nome Completo</Text>
@@ -218,18 +220,21 @@ export default function DadosUsuario() {
         </View>
       </View>
 
-      <View className="hidden max-[768px]:block fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-100 z-50">
+      <View style={{ position: 'absolute', top: 600, left: 0, right: 0, padding: 16, zIndex: 10000 }}>
+        <ToastRoot />
+      </View>
+
+      <View style={{ position: 'absolute', top: 700, left: 0, right: 0, padding: 16, backgroundColor: 'white', borderTopWidth: 1, borderTopColor: '#f3f4f6', zIndex: 9999 }}>
         <Button
           onClick={handleSave}
           block
           className="bg-yellow-300 rounded-xl py-4 shadow-lg"
         >
-          <Text className="text-black text-xl font-bold">Salvar</Text>
+          <Text className="text-black text-xl font-bold">Salvar Alterações</Text>
         </Button>
       </View>
 
       <StatusBar style="auto" />
-      <ToastRoot />
     </View>
   );
 }

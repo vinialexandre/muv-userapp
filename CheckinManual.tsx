@@ -128,10 +128,10 @@ export default function CheckinManual() {
       <View className="px-4 pb-6 max-[768px]:px-0 max-[768px]:pb-6">
         <View className="bg-white rounded-2xl shadow-lg border border-gray-100 w-full max-[768px]:rounded-none max-[768px]:shadow-none max-[768px]:border-0 max-[768px]:min-h-screen">
           <View className="p-6 max-[768px]:p-5 border-b border-gray-100">
-            <View className="flex justify-between items-center">
-              <View className="flex items-center gap-3 max-[768px]:gap-4">
+            <View className="flex-row justify-between items-center">
+              <View className="flex-row items-center gap-3 max-[768px]:gap-4">
                 <View className="max-[768px]:bg-blue-50 max-[768px]:p-2 max-[768px]:rounded-xl">
-                  <Icon name="clock" size={20} className="max-[768px]:text-blue-600" />
+                  <Icon name="clock" size={20} color="#000" />
                 </View>
                 <Text className="text-lg font-bold max-[768px]:text-xl max-[768px]:text-gray-900">Check-in Manual</Text>
               </View>
@@ -158,7 +158,7 @@ export default function CheckinManual() {
               {checkins.length === 0 ? (
                 <View className="text-center py-12 max-[768px]:py-16">
                   <View className="max-[768px]:bg-gray-50 max-[768px]:w-20 max-[768px]:h-20 max-[768px]:rounded-full max-[768px]:flex max-[768px]:items-center max-[768px]:justify-center max-[768px]:mx-auto max-[768px]:mb-4">
-                    <Icon name="clock" size={24} className="max-[768px]:text-gray-400" />
+                    <Icon name="clock" size={24} color="#9ca3af" />
                   </View>
                   <Text className="text-gray-500 max-[768px]:text-lg max-[768px]:font-medium">Nenhum check-in registrado</Text>
                   <Text className="text-gray-400 text-sm max-[768px]:text-base max-[768px]:mt-2">Toque no botão + para adicionar</Text>
@@ -166,7 +166,7 @@ export default function CheckinManual() {
               ) : (
                 checkins.map((checkin) => (
                   <View key={checkin.id} className="bg-gray-50 border border-gray-200 rounded-xl p-5 shadow-sm max-[768px]:bg-white max-[768px]:border-gray-100 max-[768px]:rounded-2xl max-[768px]:p-6 max-[768px]:shadow-md max-[768px]:border-2">
-                    <View className="flex justify-between items-center">
+                    <View className="flex-row justify-between items-center">
                       <Text className="font-semibold text-lg text-gray-900 max-[768px]:text-2xl max-[768px]:font-bold">
                         {checkin.time}
                       </Text>
@@ -188,18 +188,19 @@ export default function CheckinManual() {
         animationType="slide"
         onRequestClose={() => setIsCreateOpen(false)}
       >
-        <View className="fixed inset-0 z-50">
+        <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 9999 }}>
           <Pressable
-            className="absolute inset-0 bg-black/50"
+            style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)' }}
             onPress={() => setIsCreateOpen(false)}
           />
-          <View className="absolute inset-x-0 bottom-0 bg-white rounded-t-2xl p-6 h-[90vh] md:inset-y-10 md:mx-auto md:max-w-md md:rounded-2xl md:h-auto max-[768px]:rounded-t-3xl max-[768px]:p-6 max-[768px]:h-[85vh]">
+          <View style={{ position: 'absolute', left: 0, right: 0, bottom: 0, backgroundColor: 'white', borderTopLeftRadius: 24, borderTopRightRadius: 24, padding: 24, maxHeight: '85%' }}>
             <ScrollView>
-              <View className="flex justify-between items-center mb-6 max-[768px]:mb-8 max-[768px]:pb-4 max-[768px]:border-b max-[768px]:border-gray-100">
+              <View className="mb-6 max-[768px]:mb-8 max-[768px]:pb-4 max-[768px]:border-b max-[768px]:border-gray-100" style={{ position: 'relative' }}>
                 <Text className="text-2xl font-bold max-[768px]:text-3xl max-[768px]:text-gray-900">Novo Check-in</Text>
                 <Pressable
                   onPress={() => setIsCreateOpen(false)}
                   className="bg-transparent max-[768px]:bg-gray-100 max-[768px]:w-10 max-[768px]:h-10 max-[768px]:rounded-full max-[768px]:flex max-[768px]:items-center max-[768px]:justify-center"
+                  style={{ position: 'absolute', right: 0, top: 0 }}
                 >
                   <Icon name="x" size={20} />
                 </Pressable>
