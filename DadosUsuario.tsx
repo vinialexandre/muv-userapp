@@ -146,15 +146,18 @@ export default function DadosUsuario() {
                 <label className="block text-lg font-medium text-gray-700 mb-2 max-[768px]:text-base max-[768px]:font-bold max-[768px]:text-gray-800 max-[768px]:mb-3">CPF</label>
                 <input
                   type="text"
-                  value={formData.cpf}
-                  onChange={(e) => {
-                    // Formatar CPF automaticamente
-                    let value = e.target.value.replace(/\D/g, '');
-                    if (value.length <= 11) {
-                      value = value.replace(/(\d{3})(\d)/, '$1.$2');
-                      value = value.replace(/(\d{3})(\d)/, '$1.$2');
-                      value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+                  value={(() => {
+                    const cpf = formData.cpf.replace(/\D/g, '');
+                    if (cpf.length <= 11) {
+                      return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4')
+                        .replace(/(\d{3})(\d{3})(\d{3})(\d{1})$/, '$1.$2.$3-$4')
+                        .replace(/(\d{3})(\d{3})(\d{1,3})$/, '$1.$2.$3')
+                        .replace(/(\d{3})(\d{1,3})$/, '$1.$2');
                     }
+                    return formData.cpf;
+                  })()} 
+                  onChange={(e) => {
+                    const value = e.target.value.replace(/\D/g, '');
                     handleInputChange('cpf', value);
                   }}
                   placeholder="000.000.000-00"
@@ -179,19 +182,21 @@ export default function DadosUsuario() {
                 <label className="block text-lg font-medium text-gray-700 mb-2 max-[768px]:text-base max-[768px]:font-bold max-[768px]:text-gray-800 max-[768px]:mb-3">Telefone</label>
                 <input
                   type="tel"
-                  value={formData.telefone}
-                  onChange={(e) => {
-                    // Formatar telefone automaticamente
-                    let value = e.target.value.replace(/\D/g, '');
-                    if (value.length <= 11) {
-                      if (value.length <= 10) {
-                        value = value.replace(/(\d{2})(\d)/, '($1) $2');
-                        value = value.replace(/(\d{4})(\d)/, '$1-$2');
-                      } else {
-                        value = value.replace(/(\d{2})(\d)/, '($1) $2');
-                        value = value.replace(/(\d{5})(\d)/, '$1-$2');
-                      }
+                  value={(() => {
+                    const phone = formData.telefone.replace(/\D/g, '');
+                    if (phone.length === 11) {
+                      return phone.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+                    } else if (phone.length === 10) {
+                      return phone.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
+                    } else if (phone.length > 6) {
+                      return phone.replace(/(\d{2})(\d{4,5})(\d{0,4})/, '($1) $2-$3');
+                    } else if (phone.length > 2) {
+                      return phone.replace(/(\d{2})(\d{0,5})/, '($1) $2');
                     }
+                    return phone;
+                  })()} 
+                  onChange={(e) => {
+                    const value = e.target.value.replace(/\D/g, '');
                     handleInputChange('telefone', value);
                   }}
                   placeholder="(00) 00000-0000"

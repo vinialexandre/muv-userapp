@@ -18,6 +18,7 @@ export default function CheckinManual() {
   const [newTime, setNewTime] = useState('');
   const [newDate, setNewDate] = useState('');
   const [checkins, setCheckins] = useState<any[]>([]);
+  const [hasCheckinToday, setHasCheckinToday] = useState(false);
 
   const handleNavigate = (path: string) => {
     setIsMenuOpen(false);
@@ -91,8 +92,16 @@ export default function CheckinManual() {
       const q2 = query(collection(db, 'checkins'), where('studentID', '==', studentId), orderBy('createdAt', 'desc'));
       const [s1, s2] = await Promise.all([getDocs(q1), getDocs(q2)]);
       const map = new Map<string, any>();
-      [...s1.docs, ...s2.docs].forEach((d) => { const data = d.data(); const { date, time } = formatPt(data.createdAt, d.id); map.set(d.id, { id: d.id, date, time }); });
+      const today = new Date().toLocaleDateString('pt-BR');
+      let todayExists = false;
+      [...s1.docs, ...s2.docs].forEach((d) => { 
+        const data = d.data(); 
+        const { date, time } = formatPt(data.createdAt, d.id); 
+        if (date === today) todayExists = true;
+        map.set(d.id, { id: d.id, date, time }); 
+      });
       setCheckins(Array.from(map.values()));
+      setHasCheckinToday(todayExists);
     } catch (e) {
       console.error(e);
     }
@@ -126,11 +135,16 @@ export default function CheckinManual() {
               </div>
               <button
                 onClick={() => {
+                  if (hasCheckinToday) {
+                    Toast.show({ icon: 'fail', position: 'bottom', content: <span className="admy-toast-error" style={{ textAlign: 'center', display: 'block' }}>Não é possível fazer mais de um check-in por dia</span> });
+                    return;
+                  }
                   setNewTime(new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', hour12: false }));
                   setNewDate(new Date().toLocaleDateString('pt-BR'));
                   setIsCreateOpen(true);
                 }}
-                className="bg-yellow-300 text-black border-none rounded-xl w-11 h-11 flex items-center justify-center cursor-pointer text-xl font-bold shadow-md max-[768px]:w-14 max-[768px]:h-14 max-[768px]:rounded-2xl max-[768px]:text-2xl max-[768px]:shadow-lg hover:bg-yellow-400 transition-colors"
+
+                className={`${hasCheckinToday ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-yellow-300 text-black cursor-pointer hover:bg-yellow-400'} border-none rounded-xl w-11 h-11 flex items-center justify-center text-xl font-bold shadow-md max-[768px]:w-14 max-[768px]:h-14 max-[768px]:rounded-2xl max-[768px]:text-2xl max-[768px]:shadow-lg transition-colors`}
               >
                 +
               </button>
