@@ -9,8 +9,6 @@ import { Input } from './components/ui/Input';
 import { Button } from './components/ui/Button';
 import Router from './router';
 
-import './global.css';
-
 const mockCheckins = [
   { id: 1, time: '08:30', date: '20/09/2025', status: 'PRESENTE' },
   { id: 2, time: '09:15', date: '21/09/2025', status: 'PRESENTE' },

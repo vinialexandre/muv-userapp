@@ -5,8 +5,6 @@ import { Button } from './components/ui/Button';
 import { Input } from './components/ui/Input';
 import { Toast, ToastRoot } from './components/ui/ToastAdapter';
 import Router from './router';
-
-import './global.css';
 import CheckinManual from './CheckinManual';
 import DadosUsuario from './DadosUsuario';
 import { auth, db } from './firebase';

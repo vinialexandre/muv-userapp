@@ -8,8 +8,6 @@ import { Toast, ToastRoot } from './components/ui/ToastAdapter';
 import { Input } from './components/ui/Input';
 import { Button } from './components/ui/Button';
 import Router from './router';
-
-import './global.css';
 import { auth, db } from './firebase';
 import { collection, query, where, orderBy, getDocs, doc, setDoc } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
