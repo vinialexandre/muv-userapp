@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState, useEffect } from 'react';
-import { View, Image as RNImage, Text, Pressable, Platform } from 'react-native';
+import { View, Image as RNImage, Text, Pressable, Platform, SafeAreaView } from 'react-native';
 import { Button } from './components/ui/Button';
 import { Input } from './components/ui/Input';
 import { Toast, ToastRoot } from './components/ui/ToastAdapter';
@@ -84,7 +84,8 @@ export default function App() {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: 'white', alignItems: 'center', justifyContent: 'flex-start', paddingHorizontal: 24, paddingTop: 80 }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-start', paddingHorizontal: 24, paddingTop: 80 }}>
       <View className="items-center mb-8">
         <RNImage source={require('./assets/logo-muv.png')} style={{ height: 140, width: 140, marginBottom: 16 }} />
         <Text className="text-5xl font-bold text-gray-900 text-center">Bem-vindo</Text>
@@ -130,6 +131,7 @@ export default function App() {
       </View>
       <StatusBar style="auto" />
       <ToastRoot />
-    </View>
+      </View>
+    </SafeAreaView>
   );
 }

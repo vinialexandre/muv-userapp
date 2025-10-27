@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState, useEffect } from 'react';
-import { View, Text, Pressable, Platform, ScrollView } from 'react-native';
+import { View, Text, Pressable, Platform, ScrollView, SafeAreaView } from 'react-native';
 import { Header } from './components/Header';
 import { Menu } from './components/Menu';
 import { Icon } from './components/Icon';
@@ -113,8 +113,9 @@ export default function DadosUsuario() {
   };
 
   return (
-    <View className="min-h-screen bg-gray-50 w-full max-[768px]:bg-white max-[768px]:overflow-y-auto pt-24">
-      <Header onOpenMenu={() => setIsMenuOpen(true)} />
+    <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
+      <View className="flex-1 bg-gray-50 w-full max-[768px]:bg-white">
+        <Header onOpenMenu={() => setIsMenuOpen(true)} />
 
       <Menu
         isOpen={isMenuOpen}
@@ -122,8 +123,8 @@ export default function DadosUsuario() {
         onNavigate={handleNavigate}
       />
 
-      <View className="px-4 pb-6 max-[768px]:px-0 max-[768px]:pb-24">
-        <View className="bg-white rounded-2xl shadow-lg border border-gray-100 w-full max-[768px]:rounded-none max-[768px]:shadow-none max-[768px]:border-0 max-[768px]:min-h-screen">
+      <View className="flex-1 px-4 max-[768px]:px-0">
+        <View className="flex-1 bg-white rounded-2xl shadow-lg border border-gray-100 w-full max-[768px]:rounded-none max-[768px]:shadow-none max-[768px]:border-0">
           <View className="p-6 max-[768px]:p-5 border-b border-gray-100">
             <View className="flex items-center gap-3 max-[768px]:gap-4 max-[768px]:justify-center">
               <View className="max-[768px]:bg-blue-50 max-[768px]:p-2 max-[768px]:rounded-xl">
@@ -133,7 +134,7 @@ export default function DadosUsuario() {
             </View>
           </View>
 
-          <ScrollView className="p-6 max-[768px]:p-5 max-[768px]:flex-1" contentContainerStyle={{ paddingBottom: 400 }}>
+          <ScrollView className="flex-1 p-6 max-[768px]:p-5" contentContainerStyle={{ paddingBottom: 20 }}>
             <View className="flex flex-col gap-4 max-[768px]:gap-6">
               <View>
                 <Text className="block text-lg font-medium text-gray-700 mb-2 max-[768px]:text-base max-[768px]:font-bold max-[768px]:text-gray-800 max-[768px]:mb-3">Nome Completo</Text>
@@ -184,16 +185,18 @@ export default function DadosUsuario() {
                 <Input
                   value={(() => {
                     const phone = formData.telefone.replace(/\D/g, '');
-                    if (phone.length === 11) {
+                    if (phone.length >= 11) {
                       return phone.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
-                    } else if (phone.length === 10) {
+                    } else if (phone.length >= 10) {
                       return phone.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
-                    } else if (phone.length > 6) {
-                      return phone.replace(/(\d{2})(\d{4,5})(\d{0,4})/, '($1) $2-$3');
-                    } else if (phone.length > 2) {
-                      return phone.replace(/(\d{2})(\d{0,5})/, '($1) $2');
+                    } else if (phone.length >= 7) {
+                      return phone.replace(/(\d{2})(\d{4,5})(\d{1,4})/, '($1) $2-$3');
+                    } else if (phone.length >= 3) {
+                      return phone.replace(/(\d{2})(\d{1,5})/, '($1) $2');
+                    } else if (phone.length >= 1) {
+                      return phone.replace(/(\d{1,2})/, '($1');
                     }
-                    return phone;
+                    return '';
                   })()}
                   onChange={(text) => {
                     const value = text.replace(/\D/g, '');
@@ -206,7 +209,7 @@ export default function DadosUsuario() {
                 />
               </View>
 
-              <View className="mt-8 max-[768px]:hidden">
+              <View className="mt-8">
                 <Button
                   onClick={handleSave}
                   block
@@ -220,21 +223,10 @@ export default function DadosUsuario() {
         </View>
       </View>
 
-      <View style={{ position: 'absolute', top: 600, left: 0, right: 0, padding: 16, zIndex: 10000 }}>
         <ToastRoot />
-      </View>
 
-      <View style={{ position: 'absolute', top: 700, left: 0, right: 0, padding: 16, backgroundColor: 'white', borderTopWidth: 1, borderTopColor: '#f3f4f6', zIndex: 9999 }}>
-        <Button
-          onClick={handleSave}
-          block
-          className="bg-yellow-300 rounded-xl py-4 shadow-lg"
-        >
-          <Text className="text-black text-xl font-bold">Salvar Alterações</Text>
-        </Button>
+        <StatusBar style="auto" />
       </View>
-
-      <StatusBar style="auto" />
-    </View>
+    </SafeAreaView>
   );
 }

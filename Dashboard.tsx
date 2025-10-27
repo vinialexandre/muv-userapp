@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
-import { View, Text, Pressable, ScrollView } from 'react-native';
+import { View, Text, Pressable, ScrollView, SafeAreaView } from 'react-native';
 import { Header } from './components/Header';
 import { Menu } from './components/Menu';
 import { Icon } from './components/Icon';
@@ -31,8 +31,9 @@ export default function Dashboard() {
   };
 
   return (
-    <View className="min-h-screen bg-gray-50 w-full pt-24">
-      <Header onOpenMenu={() => setIsMenuOpen(true)} />
+    <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
+      <View className="flex-1 bg-gray-50 w-full">
+        <Header onOpenMenu={() => setIsMenuOpen(true)} />
 
       <Menu
         isOpen={isMenuOpen}
@@ -139,7 +140,8 @@ export default function Dashboard() {
         </View>
       </Popup>
 
-      <StatusBar style="auto" />
-    </View>
+        <StatusBar style="auto" />
+      </View>
+    </SafeAreaView>
   );
 }

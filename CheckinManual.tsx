@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
-import { useState, useEffect } from 'react';
-import { View, Text, Pressable, Platform, ScrollView, Modal, Alert } from 'react-native';
+import { useState, useEffect, useRef } from 'react';
+import { View, Text, Pressable, Platform, ScrollView, Modal, Alert, SafeAreaView, Animated } from 'react-native';
 import { Header } from './components/Header';
 import { Menu } from './components/Menu';
 import { Icon } from './components/Icon';
@@ -22,6 +22,7 @@ export default function CheckinManual() {
   const [newDate, setNewDate] = useState('');
   const [checkins, setCheckins] = useState<any[]>([]);
   const [hasCheckinToday, setHasCheckinToday] = useState(false);
+  const fadeAnim = useRef(new Animated.Value(0)).current;
 
   const handleNavigate = (path: string) => {
     setIsMenuOpen(false);
@@ -116,8 +117,9 @@ export default function CheckinManual() {
   }, []);
 
   return (
-    <View className="min-h-screen bg-gray-50 w-full max-[768px]:bg-white max-[768px]:overflow-y-auto pt-24">
-      <Header onOpenMenu={() => setIsMenuOpen(true)} />
+    <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
+      <View className="flex-1 bg-gray-50 w-full max-[768px]:bg-white">
+        <Header onOpenMenu={() => setIsMenuOpen(true)} />
 
       <Menu
         isOpen={isMenuOpen}
@@ -125,8 +127,8 @@ export default function CheckinManual() {
         onNavigate={handleNavigate}
       />
 
-      <View className="px-4 pb-6 max-[768px]:px-0 max-[768px]:pb-6">
-        <View className="bg-white rounded-2xl shadow-lg border border-gray-100 w-full max-[768px]:rounded-none max-[768px]:shadow-none max-[768px]:border-0 max-[768px]:min-h-screen">
+      <View className="flex-1 px-4 pb-6 max-[768px]:px-0 max-[768px]:pb-6">
+        <View className="flex-1 bg-white rounded-2xl shadow-lg border border-gray-100 w-full max-[768px]:rounded-none max-[768px]:shadow-none max-[768px]:border-0 max-[768px]:mb-6">
           <View className="p-6 max-[768px]:p-5 border-b border-gray-100">
             <View className="flex-row justify-between items-center">
               <View className="flex-row items-center gap-3 max-[768px]:gap-4">
@@ -144,6 +146,11 @@ export default function CheckinManual() {
                   setNewTime(new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', hour12: false }));
                   setNewDate(new Date().toLocaleDateString('pt-BR'));
                   setIsCreateOpen(true);
+                  Animated.timing(fadeAnim, {
+                    toValue: 1,
+                    duration: 300,
+                    useNativeDriver: true,
+                  }).start();
                 }}
                 disabled={hasCheckinToday}
                 className={`${hasCheckinToday ? 'bg-gray-300' : 'bg-yellow-300'} border-none rounded-xl w-11 h-11 flex items-center justify-center shadow-md max-[768px]:w-14 max-[768px]:h-14 max-[768px]:rounded-2xl max-[768px]:shadow-lg`}
@@ -153,15 +160,15 @@ export default function CheckinManual() {
             </View>
           </View>
 
-          <ScrollView className="p-6 max-[768px]:p-4 max-[768px]:flex-1">
-            <View className="flex flex-col gap-4 max-[768px]:gap-6">
+          <ScrollView className="flex-1 p-6 max-[768px]:p-4" contentContainerStyle={{ paddingBottom: 120, flexGrow: 1 }}>
+            <View className="flex flex-col gap-4 max-[768px]:gap-6" style={{ flex: checkins.length === 0 ? 1 : undefined, justifyContent: checkins.length === 0 ? 'center' : undefined }}>
               {checkins.length === 0 ? (
-                <View className="text-center py-12 max-[768px]:py-16">
-                  <View className="max-[768px]:bg-gray-50 max-[768px]:w-20 max-[768px]:h-20 max-[768px]:rounded-full max-[768px]:flex max-[768px]:items-center max-[768px]:justify-center max-[768px]:mx-auto max-[768px]:mb-4">
+                <View className="items-center py-12 max-[768px]:py-16">
+                  <View className="bg-gray-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
                     <Icon name="clock" size={24} color="#9ca3af" />
                   </View>
-                  <Text className="text-gray-500 max-[768px]:text-lg max-[768px]:font-medium">Nenhum check-in registrado</Text>
-                  <Text className="text-gray-400 text-sm max-[768px]:text-base max-[768px]:mt-2">Toque no botão + para adicionar</Text>
+                  <Text className="text-gray-500 max-[768px]:text-lg max-[768px]:font-medium" style={{ textAlign: 'center' }}>Nenhum check-in registrado</Text>
+                  <Text className="text-gray-400 text-sm max-[768px]:text-base max-[768px]:mt-2" style={{ textAlign: 'center' }}>Toque no botão + para adicionar</Text>
                 </View>
               ) : (
                 checkins.map((checkin) => (
@@ -186,19 +193,41 @@ export default function CheckinManual() {
         visible={isCreateOpen}
         transparent
         animationType="slide"
-        onRequestClose={() => setIsCreateOpen(false)}
+        onRequestClose={() => {
+          Animated.timing(fadeAnim, {
+            toValue: 0,
+            duration: 200,
+            useNativeDriver: true,
+          }).start(() => setIsCreateOpen(false));
+        }}
       >
         <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 9999 }}>
-          <Pressable
-            style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)' }}
-            onPress={() => setIsCreateOpen(false)}
-          />
+          <Animated.View
+            style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', opacity: fadeAnim }}
+          >
+            <Pressable
+              style={{ flex: 1 }}
+              onPress={() => {
+                Animated.timing(fadeAnim, {
+                  toValue: 0,
+                  duration: 200,
+                  useNativeDriver: true,
+                }).start(() => setIsCreateOpen(false));
+              }}
+            />
+          </Animated.View>
           <View style={{ position: 'absolute', left: 0, right: 0, bottom: 0, backgroundColor: 'white', borderTopLeftRadius: 24, borderTopRightRadius: 24, padding: 24, maxHeight: '85%' }}>
             <ScrollView>
               <View className="mb-6 max-[768px]:mb-8 max-[768px]:pb-4 max-[768px]:border-b max-[768px]:border-gray-100" style={{ position: 'relative' }}>
                 <Text className="text-2xl font-bold max-[768px]:text-3xl max-[768px]:text-gray-900">Novo Check-in</Text>
                 <Pressable
-                  onPress={() => setIsCreateOpen(false)}
+                  onPress={() => {
+                    Animated.timing(fadeAnim, {
+                      toValue: 0,
+                      duration: 300,
+                      useNativeDriver: true,
+                    }).start(() => setIsCreateOpen(false));
+                  }}
                   className="bg-transparent max-[768px]:bg-gray-100 max-[768px]:w-10 max-[768px]:h-10 max-[768px]:rounded-full max-[768px]:flex max-[768px]:items-center max-[768px]:justify-center"
                   style={{ position: 'absolute', right: 0, top: 0 }}
                 >
@@ -297,9 +326,10 @@ export default function CheckinManual() {
         </View>
       </Modal>
 
-      <StatusBar style="auto" />
-      <ToastRoot />
-    </View>
+        <StatusBar style="auto" />
+        <ToastRoot />
+      </View>
+    </SafeAreaView>
   );
 }
 

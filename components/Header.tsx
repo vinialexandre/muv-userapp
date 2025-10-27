@@ -7,9 +7,9 @@ interface HeaderProps {
 
 export function Header({ onOpenMenu }: HeaderProps) {
   return (
-    <View className="w-full bg-white px-4 mb-6 absolute top-0 left-0 right-0 z-50">
-      <View className="flex-row items-center justify-between" style={{ marginTop: 20, marginBottom: -20 }}>
-        <RNImage source={require('../assets/logo-muv.png')} style={{ height: 80, width: 80, marginLeft: 8 }} />
+    <View className="w-full bg-white px-4 pt-8 pb-3 border-b border-gray-200">
+      <View className="flex-row items-center justify-between">
+        <RNImage source={require('../assets/logo-muv.png')} style={{ height: 60, width: 60 }} />
         <Pressable
           onPress={onOpenMenu}
           className="rounded-lg p-2 flex items-center justify-center"
@@ -17,7 +17,6 @@ export function Header({ onOpenMenu }: HeaderProps) {
           <Icon name="menu" size={24} />
         </Pressable>
       </View>
-      <View className="h-px bg-gray-200 mt-2" />
     </View>
   );
 }
