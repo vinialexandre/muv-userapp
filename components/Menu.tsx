@@ -36,6 +36,22 @@ export function Menu({ isOpen, onClose, onNavigate }: MenuProps) {
             </Pressable>
 
             <Pressable
+              onPress={() => onNavigate('/dados-pagamento')}
+              className={`flex-row items-center gap-4 px-8 py-5 rounded-xl ${currentPath === '/dados-pagamento' ? 'bg-white/10' : 'bg-transparent'}`}
+            >
+              <Icon name="creditCard" size={28} color="#fff" />
+              <Text className="text-white text-xl">Dados de Pagamento</Text>
+            </Pressable>
+
+            <Pressable
+              onPress={() => onNavigate('/faturas')}
+              className={`flex-row items-center gap-4 px-8 py-5 rounded-xl ${currentPath === '/faturas' ? 'bg-white/10' : 'bg-transparent'}`}
+            >
+              <Icon name="fileText" size={28} color="#fff" />
+              <Text className="text-white text-xl">Minhas Faturas</Text>
+            </Pressable>
+
+            <Pressable
               onPress={() => onNavigate('/checkin-manual')}
               className={`flex-row items-center gap-4 px-8 py-5 rounded-xl ${currentPath === '/checkin-manual' ? 'bg-white/10' : 'bg-transparent'}`}
             >

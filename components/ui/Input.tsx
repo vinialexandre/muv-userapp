@@ -21,6 +21,7 @@ export function Input({ value, onChange, disabled, placeholder, type = 'text', c
       onChangeText={(t) => onChange && onChange(t)}
       editable={!disabled}
       placeholder={placeholder}
+      placeholderTextColor="#D1D5DB"
       secureTextEntry={type === 'password'}
       className={className}
       maxLength={maxLength}

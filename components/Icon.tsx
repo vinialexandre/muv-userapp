@@ -7,7 +7,7 @@ export type IconName =
   | 'edit' | 'trash' | 'plus'
   | 'search' | 'filter' | 'x' | 'calendar' | 'clock'
   | 'menu'
-  | 'creditCard'
+  | 'creditCard' | 'fileText'
   | 'eye' | 'eyeOff';
 
 const icons: Partial<Record<IconName, string>> = {
@@ -17,6 +17,9 @@ const icons: Partial<Record<IconName, string>> = {
   menu: 'M3 12h18M3 6h18M3 18h18',
   x: 'M18 6 6 18M6 6l12 12',
   plus: 'M12 5v14M5 12h14',
+  creditCard: 'M1 4h22v16H1V4zm0 4h22M5 12h2m4 0h2',
+  fileText: 'M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zM14 2v6h6M16 13H8m8 4H8m8 4H8',
+  folder: 'M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z',
   eye: 'M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6z',
   eyeOff: 'M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6z M3 3l18 18'
 };

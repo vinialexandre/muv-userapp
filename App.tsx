@@ -7,6 +7,8 @@ import { Toast, ToastRoot } from './components/ui/ToastAdapter';
 import Router from './router';
 import CheckinManual from './CheckinManual';
 import DadosUsuario from './DadosUsuario';
+import DadosPagamento from './DadosPagamento';
+import Faturas from './Faturas';
 import { auth, db } from './firebase';
 import { signInWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
@@ -38,6 +40,14 @@ export default function App() {
 
   if (currentPath === '/dados-usuario') {
     return <DadosUsuario />;
+  }
+
+  if (currentPath === '/dados-pagamento') {
+    return <DadosPagamento />;
+  }
+
+  if (currentPath === '/faturas') {
+    return <Faturas />;
   }
 
   const mapAuthError = (e: any) => {
@@ -86,12 +96,12 @@ export default function App() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-start', paddingHorizontal: 24, paddingTop: 80 }}>
-      <View className="items-center mb-8">
-        <RNImage source={require('./assets/logo-muv.png')} style={{ height: 140, width: 140, marginBottom: 16 }} />
-        <Text className="text-5xl font-bold text-gray-900 text-center">Bem-vindo</Text>
-      </View>
+        <View className="items-center mb-8">
+          <RNImage source={require('./assets/logo-muv.png')} style={{ height: 140, width: 140, marginBottom: 16 }} />
+          <Text className="text-5xl font-bold text-gray-900 text-center">Bem-vindo</Text>
+        </View>
 
-      <View className="w-96">
+        <View className="w-96">
           <View className="mb-6">
             <Input
               value={email}
@@ -128,9 +138,9 @@ export default function App() {
           >
             <Text className="text-white font-bold text-xl text-center">Entrar</Text>
           </Button>
-      </View>
-      <StatusBar style="auto" />
-      <ToastRoot />
+        </View>
+        <StatusBar style="auto" />
+        <ToastRoot />
       </View>
     </SafeAreaView>
   );
